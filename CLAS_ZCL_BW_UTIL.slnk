@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZCL_BW_UTIL" VERSION="1" LANGU="E" DESCRIPT="Bw util" UUID="005056AA34561EE490E0A4A577574FA7" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="740" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 ">
+ <publicSection>class ZCL_BW_UTIL definition
+  public
+  final
+  create public .
+
+public section.
+
+  class-data DUMMY type STRING .
+
+  class-methods GET_SOURSYSTEM
+    importing
+      !IR_REQ type ref to IF_RSBK_REQUEST_ADMINTAB_VIEW
+    returning
+      value(RE_SOURSYSTEM) type RSSOURSYSID .
+  type-pools RSTR .
+  class-methods ADD_SYS_MSG
+    changing
+      !CT_MONITOR type RSTR_TY_T_MONITOR .
+  class-methods GET_TIMESTAMP
+    returning
+      value(RE_STAMP) type CHAR20 .
+  class-methods FIRST_OF_PER
+    importing
+      !IF_PERIOD type DATA
+    returning
+      value(EF_DATE) type DATUM .
+  class-methods ADD_SYS_MSG_END
+    importing
+      !RECNO type SYTABIX
+    changing
+      !MON type RSTR_TY_T_MONITORS .
+  class-methods HAS_ERROR
+    importing
+      !IT_MONITOR type STANDARD TABLE
+    returning
+      value(RE_BOOLE) type BOOLE_D .
+  class-methods AMOUNT_IN
+    importing
+      !IF_CURRENCY type WAERS
+      !IF_AMOUNT type DATA
+    exporting
+      !EF_AMOUNT type DATA .
+  class-methods AMOUNT_OUT
+    importing
+      !IF_CURRENCY type WAERS
+      !IF_AMOUNT type DATA
+    exporting
+      !EF_AMOUNT type DATA .
+  class-methods FIRST_OF_YEAR
+    importing
+      !IF_PERIOD type DATA
+    returning
+      value(EF_DATE) type DATUM .
+  class-methods FIRST_OF_PREV_YEAR_FISC
+    importing
+      !IF_PERIOD type DATUM
+    returning
+      value(EF_FISCPER) type /BI0/OIFISCPER .</publicSection>
+ <protectedSection>protected section.</protectedSection>
+ <privateSection>private section.</privateSection>
+ <localImplementation>*&quot;* use this source file for the definition and implementation of
+*&quot;* local helper classes, interface definitions and type
+*&quot;* declarations</localImplementation>
+ <localTypes>*&quot;* use this source file for any type of declarations (class
+*&quot;* definitions, interfaces or type declarations) you need for
+*&quot;* components in the private section</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <typeUsage CLSNAME="ZCL_BW_UTIL" TYPEGROUP="RSTR" VERSION="1" TPUTYPE="0" IMPLICIT="X"/>
+ <forwardDeclaration>RSTR</forwardDeclaration>
+ <attribute CLSNAME="ZCL_BW_UTIL" CMPNAME="DUMMY" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDON="00000000" ATTDECLTYP="1" ATTEXPVIRT="0" TYPTYPE="1" TYPE="STRING" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="740" TYPESRC_LENG="0 "/>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="ADD_SYS_MSG" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="ADD_SYS_MSG" SCONAME="CT_MONITOR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDON="00000000" PARDECLTYP="2" PARPASSTYP="1" TYPTYPE="1" TYPE="RSTR_TY_T_MONITOR"/>
+  <source>METHOD add_sys_msg.
+*    FIELD-SYMBOLS: &lt;monitor&gt; LIKE LINE OF ct_monitor.
+*    APPEND INITIAL LINE TO ct_monitor ASSIGNING &lt;monitor&gt;.
+*    CHECK &lt;monitor&gt; IS ASSIGNED.
+*    MOVE-CORRESPONDING syst TO &lt;monitor&gt;.
+    data ls_monitor like LINE OF ct_monitor.
+    MOVE-CORRESPONDING syst TO ls_monitor.
+    COLLECT ls_monitor into ct_monitor.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="ADD_SYS_MSG_END" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="5 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141009" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="ADD_SYS_MSG_END" SCONAME="RECNO" VERSION="1" LANGU="E" DESCRIPT="Row Index of Internal Tables" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141009" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="SYTABIX"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="ADD_SYS_MSG_END" SCONAME="MON" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141009" CHANGEDON="00000000" PARDECLTYP="2" PARPASSTYP="1" TYPTYPE="1" TYPE="RSTR_TY_T_MONITORS"/>
+  <source>METHOD add_sys_msg_end.
+    FIELD-SYMBOLS: &lt;monitor&gt; LIKE LINE OF mon.
+    APPEND INITIAL LINE TO mon ASSIGNING &lt;monitor&gt;.
+    CHECK &lt;monitor&gt; IS ASSIGNED.
+    MOVE-CORRESPONDING syst TO &lt;monitor&gt;.
+    &lt;monitor&gt;-recno = recno.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_IN" VERSION="1" LANGU="E" DESCRIPT="Shift currency decimal places - input" EXPOSURE="2" STATE="1" EDITORDER="7 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDBY="DRIGER" CHANGEDON="20141105" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_IN" SCONAME="IF_CURRENCY" VERSION="1" LANGU="E" DESCRIPT="Currency Key" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="WAERS"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_IN" SCONAME="IF_AMOUNT" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_IN" SCONAME="EF_AMOUNT" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <source>METHOD AMOUNT_IN.
+    DATA: shift    TYPE i,
+          decimals TYPE i,
+          ls_tcurx TYPE tcurx.
+
+    SELECT SINGLE * FROM tcurx
+      INTO ls_tcurx
+      WHERE currkey = if_currency.
+    IF sy-subrc = 0.
+      decimals = ls_tcurx-currdec.
+      shift = ls_tcurx-currdec - 2.
+    ELSE.
+      decimals = 2.
+      shift = 0.
+    ENDIF.
+    ef_amount = if_amount * 10 ** shift.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_OUT" VERSION="1" LANGU="E" DESCRIPT="Shift currency decimal places - output" EXPOSURE="2" STATE="1" EDITORDER="8 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDBY="DRIGER" CHANGEDON="20141105" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_OUT" SCONAME="IF_CURRENCY" VERSION="1" LANGU="E" DESCRIPT="Currency Key" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="WAERS"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_OUT" SCONAME="IF_AMOUNT" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="AMOUNT_OUT" SCONAME="EF_AMOUNT" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141105" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <source>METHOD AMOUNT_OUT.
+    DATA: shift    TYPE i,
+          decimals TYPE i,
+          ls_tcurx TYPE tcurx.
+
+    SELECT SINGLE * FROM tcurx
+      INTO ls_tcurx
+      WHERE currkey = if_currency.
+    IF sy-subrc = 0.
+      decimals = ls_tcurx-currdec.
+      shift = 2 - ls_tcurx-currdec.
+    ELSE.
+      decimals = 2.
+      shift = 0.
+    ENDIF.
+    ef_amount = if_amount * 10 ** shift.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_PER" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="4 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141009" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_PER" SCONAME="IF_PERIOD" VERSION="1" LANGU="E" DESCRIPT="Calendar year/month" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141107" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_PER" SCONAME="EF_DATE" VERSION="1" LANGU="E" DESCRIPT="Date" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141009" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="DATUM"/>
+  <source>METHOD first_of_per.
+    DATA: lr_descr TYPE REF TO cl_abap_datadescr.
+* determine type of input parameter
+    lr_descr ?= cl_abap_datadescr=&gt;describe_by_data( if_period ).
+    IF lr_descr-&gt;is_ddic_type( ) = abap_true.
+      DATA(lt_ddic) = lr_descr-&gt;get_ddic_object( ).
+      READ TABLE lt_ddic ASSIGNING FIELD-SYMBOL(&lt;ddic&gt;) INDEX 1.
+    ENDIF.
+
+    IF &lt;ddic&gt; IS ASSIGNED.
+      CASE &lt;ddic&gt;-tabname.
+        WHEN &apos;/BI0/OICALMONTH&apos;.
+          ef_date = if_period &amp;&amp; &apos;01&apos;.
+        WHEN &apos;/BI0/OIFISCPER&apos;.
+          ef_date = |{ if_period(4) }{ if_period+5(2) }| &amp;&amp; &apos;01&apos;.
+        WHEN OTHERS.
+      ENDCASE.
+    ELSE.
+      ef_date = if_period &amp;&amp; &apos;01&apos;.
+    ENDIF.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_PREV_YEAR_FISC" VERSION="1" LANGU="E" DESCRIPT="First fiscper of previous year" EXPOSURE="2" STATE="1" EDITORDER="10 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141124" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_PREV_YEAR_FISC" SCONAME="IF_PERIOD" VERSION="1" LANGU="E" DESCRIPT="Calendar year/month" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141124" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="DATUM"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_PREV_YEAR_FISC" SCONAME="EF_FISCPER" VERSION="1" LANGU="E" DESCRIPT="Fiscal year / period" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141124" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="/BI0/OIFISCPER"/>
+  <source>METHOD first_of_prev_year_fisc.
+    DATA: lf_year TYPE numc4.
+    lf_year = if_period(4) - 1.
+    ef_fiscper = lf_year &amp;&amp; &apos;001&apos;.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_YEAR" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="9 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141112" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_YEAR" SCONAME="IF_PERIOD" VERSION="1" LANGU="E" DESCRIPT="Calendar year/month" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141112" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="FIRST_OF_YEAR" SCONAME="EF_DATE" VERSION="1" LANGU="E" DESCRIPT="Date" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141112" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="DATUM"/>
+  <source>METHOD FIRST_OF_YEAR.
+*    DATA: lr_descr TYPE REF TO cl_abap_datadescr.
+** determine type of input parameter
+*    lr_descr ?= cl_abap_datadescr=&gt;describe_by_data( if_period ).
+*    IF lr_descr-&gt;is_ddic_type( ) = abap_true.
+*      DATA(lt_ddic) = lr_descr-&gt;get_ddic_object( ).
+*      READ TABLE lt_ddic ASSIGNING FIELD-SYMBOL(&lt;ddic&gt;) INDEX 1.
+*    ENDIF.
+
+*    IF &lt;ddic&gt; IS ASSIGNED.
+*      CASE &lt;ddic&gt;-tabname.
+*        WHEN &apos;/BI0/OICALMONTH&apos; or
+*             &apos;/BI0/OIFISCPER&apos;.
+*          ef_date = if_period(4) &amp;&amp; &apos;0101&apos;.
+*        WHEN OTHERS.
+*      ENDCASE.
+*    ELSE.
+      ef_date = if_period(4) &amp;&amp; &apos;0101&apos;.
+*    ENDIF.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="GET_SOURSYSTEM" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDBY="DRIGER" CHANGEDON="20140923" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="GET_SOURSYSTEM" SCONAME="IR_REQ" VERSION="1" LANGU="E" DESCRIPT="Interface Between IPRO Admin Tab and Request" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="3" TYPE="IF_RSBK_REQUEST_ADMINTAB_VIEW"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="GET_SOURSYSTEM" SCONAME="RE_SOURSYSTEM" VERSION="1" LANGU="E" DESCRIPT="BW: Souce system IDs table" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20140923" CHANGEDBY="DRIGER" CHANGEDON="20140923" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="RSSOURSYSID"/>
+  <source>METHOD get_soursystem.
+    DATA: lf_logsys TYPE logsys.
+    lf_logsys = ir_req-&gt;get_logsys( ).
+*   retrieve source system ID form the source system
+    CALL FUNCTION &apos;RSDG_ID_GET_FROM_LOGSYS&apos;
+      EXPORTING
+        i_source_system = lf_logsys
+      IMPORTING
+        e_soursysid     = re_soursystem
+      EXCEPTIONS
+        id_not_found    = 1.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="GET_TIMESTAMP" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141006" CHANGEDBY="DRIGER" CHANGEDON="20141006" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="GET_TIMESTAMP" SCONAME="RE_STAMP" VERSION="1" LANGU="E" DESCRIPT="UTC Time Stamp in Short Form (YYYYMMDDhhmmss)" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141006" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="CHAR20"/>
+  <source>METHOD get_timestamp.
+    DATA: lf_stamp TYPE tzonref-tstamps.
+    GET TIME STAMP FIELD lf_stamp.
+    re_stamp = lf_stamp.
+  ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BW_UTIL" CMPNAME="HAS_ERROR" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="6 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141021" CHANGEDBY="DRIGER" CHANGEDON="20141105" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="740" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="HAS_ERROR" SCONAME="IT_MONITOR" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141021" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STANDARD TABLE"/>
+  <parameter CLSNAME="ZCL_BW_UTIL" CMPNAME="HAS_ERROR" SCONAME="RE_BOOLE" VERSION="1" LANGU="E" DESCRIPT="Data element for domain BOOLE: TRUE (=&apos;X&apos;) and FALSE (=&apos; &apos;)" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20141021" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="BOOLE_D"/>
+  <source>METHOD HAS_ERROR.
+    FIELD-SYMBOLS: &lt;monitor&gt; type data,
+                   &lt;msgty&gt;   TYPE data.
+
+    LOOP AT it_monitor ASSIGNING &lt;monitor&gt;.
+      ASSIGN COMPONENT &apos;MSGTY&apos; OF STRUCTURE &lt;monitor&gt; TO &lt;msgty&gt;.
+      CHECK &lt;msgty&gt; CA &apos;AEX&apos;.
+      re_boole = abap_true.
+      EXIT.
+    ENDLOOP.
+  ENDMETHOD.</source>
+ </method>
+</CLAS>
