@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZCL_JOB_UTIL" VERSION="1" LANGU="6" DESCRIPT="Batch jobovi" UUID="4ADC5F916EF2617EE10000000A64649B" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000" CHGDANYON="00000000" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 ">
+ <publicSection>class ZCL_JOB_UTIL definition
+  public
+  create public .
+
+*&quot;* public components of class ZCL_JOB_UTIL
+*&quot;* do not include other source files here!!!
+public section.
+
+  data M_JOBNAME type TBTCJOB-JOBNAME read-only .
+  data M_JOBCOUNT type TBTCJOB-JOBCOUNT read-only .
+  class-data WA_JOB type TBTCJOB read-only .
+  class-data WA_STEP type BPJOBSTEP read-only .
+  class-data WA_SEL type BTCSELECT read-only .
+
+  methods CONSTRUCTOR
+    importing
+      !I_JOBCOUNT type TBTCJOB-JOBCOUNT
+      !I_JOBNAME type TBTCJOB-JOBNAME
+      !I_STRTDATE type BTCSDLDATE optional
+      !I_BTCSDLDATE type BTCSDLTIME optional
+    exceptions
+      ERROR .
+  methods ADD_STEP
+    importing
+      !I_STEP type BPJOBSTEP
+    exceptions
+      ERROR .
+  methods RELEASE
+    importing
+      !I_STRTDATE type BTCSDLDATE
+      !I_STRTTIME type BTCSDLTIME
+    exceptions
+      ERROR .
+  methods SCHEDULE
+    exceptions
+      ERROR .
+  class-methods CREATE
+    importing
+      !I_JOBNAME type BTCJOB
+    returning
+      value(RE_JOB) type ref to ZCL_JOB_UTIL
+    exceptions
+      ERROR .
+  class-methods OPEN
+    importing
+      !I_JOBNAME type TBTCJOB-JOBNAME
+      !I_JOBCOUNT type TBTCJOB-JOBCOUNT optional
+    returning
+      value(RE_JOB) type ref to ZCL_JOB_UTIL
+    exceptions
+      ERROR .
+  class-methods SELECT
+    importing
+      !I_PARAM type BTCSELECT
+    exporting
+      !ET_JOBS type CACS_TT_TBTCJOB
+    exceptions
+      ERROR .
+  class-methods GET_SCHEDULED
+    importing
+      !I_JOBNAME type BTCJOB
+    returning
+      value(R_JOB) type TBTCJOB
+    exceptions
+      ERROR .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZCL_JOB_UTIL
+*&quot;* do not include other source files here!!!
+protected section.
+
+  data:
+    MT_STEPLIST type TABLE OF TBTCSTEP .
+
+  methods SAVE
+    exceptions
+      ERROR .
+  methods READ
+    exceptions
+      ERROR .</protectedSection>
+ <privateSection>*&quot;* private components of class ZCL_JOB_UTIL
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <attribute CLSNAME="ZCL_JOB_UTIL" CMPNAME="MT_STEPLIST" VERSION="1" LANGU="6" DESCRIPT="Opis vrijednosti koraka (BI-API)" EXPOSURE="1" STATE="1" EDITORDER="3 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091028" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="4" SRCROW1="6 " SRCCOLUMN1="4 " SRCROW2="6 " SRCCOLUMN2="37 " TYPESRC_LENG="36 " TYPESRC="MT_STEPLIST type TABLE OF TBTCSTEP
+"/>
+ <attribute CLSNAME="ZCL_JOB_UTIL" CMPNAME="M_JOBCOUNT" VERSION="1" LANGU="6" DESCRIPT="Broj pozadinskog posla" EXPOSURE="2" STATE="1" EDITORDER="2 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091028" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="TBTCJOB-JOBCOUNT" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZCL_JOB_UTIL" CMPNAME="M_JOBNAME" VERSION="1" LANGU="6" DESCRIPT="Naziv pozadinskog posla" EXPOSURE="2" STATE="1" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091028" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="TBTCJOB-JOBNAME" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZCL_JOB_UTIL" CMPNAME="WA_JOB" VERSION="1" LANGU="6" DESCRIPT="Structure for Transferring Job Header Data (BI-API)" EXPOSURE="2" STATE="1" EDITORDER="4 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDBY="DRIGER" CHANGEDON="20091027" ATTDECLTYP="1" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="TBTCJOB" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="700" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZCL_JOB_UTIL" CMPNAME="WA_SEL" VERSION="1" LANGU="6" DESCRIPT="for new BP functions: step data for a job" EXPOSURE="2" STATE="1" EDITORDER="6 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDBY="DRIGER" CHANGEDON="20091027" ATTDECLTYP="1" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="BTCSELECT" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="700" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZCL_JOB_UTIL" CMPNAME="WA_STEP" VERSION="1" LANGU="6" DESCRIPT="Structure for Transferring Job Header Data (BI-API)" EXPOSURE="2" STATE="1" EDITORDER="5 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDBY="DRIGER" CHANGEDON="20091027" ATTDECLTYP="1" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="BPJOBSTEP" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="700" TYPESRC_LENG="0 "/>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="ADD_STEP" VERSION="1" LANGU="6" DESCRIPT="Add step to job" EXPOSURE="2" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="ADD_STEP" SCONAME="I_STEP" VERSION="1" LANGU="6" DESCRIPT="Opis vrijednosti koraka (BI-API)" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDBY="DRIGER" CHANGEDON="20091026" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BPJOBSTEP"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="ADD_STEP" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom kreiranja koraka posla" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000"/>
+  <source>METHOD add_step.
+  data: l_stepnr type BAPIXMJOB-STEPCOUNT.
+*    data: wa_step TYPE tbtcstep.
+*  wa_step-PROGRAM = i_prog
+*  wa_step-TYP     = i_type
+*  wa_step-PARAMETER =
+*  wa_step-OPSYSTEM
+*  wa_step-AUTHCKNAM = i_name.
+  CALL FUNCTION &apos;BP_ADD_JOB_STEP&apos;
+    EXPORTING
+      jobname                         = m_jobname
+      jobcount                        = m_jobcount
+      step                            = i_step
+*     ALLPRIPAR                       =
+*     ALLARCPAR                       =
+   importing
+     step_number                     = l_stepnr
+   EXCEPTIONS
+     cannot_get_priarc_params        = 1
+     cannot_read_job                 = 2
+     cannot_modify_job               = 3
+     error_modifying_worktable       = 4
+     OTHERS                          = 5
+            .
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    RAISE error.
+  ENDIF.
+
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="CONSTRUCTOR" VERSION="1" LANGU="6" DESCRIPT="Constructor" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091022" MTDTYPE="2" MTDDECLTYP="0" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="CONSTRUCTOR" SCONAME="I_JOBCOUNT" VERSION="1" LANGU="6" DESCRIPT="Broj pozadinskog posla" CMPTYPE="1" MTDTYPE="2" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="TBTCJOB-JOBCOUNT"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="CONSTRUCTOR" SCONAME="I_JOBNAME" VERSION="1" LANGU="6" DESCRIPT="Naziv pozadinskog posla" CMPTYPE="1" MTDTYPE="2" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="TBTCJOB-JOBNAME"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="CONSTRUCTOR" SCONAME="I_STRTDATE" VERSION="1" LANGU="6" DESCRIPT="Datum rasporeðivanja koraka/posla" CMPTYPE="1" MTDTYPE="2" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCSDLDATE" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="CONSTRUCTOR" SCONAME="I_BTCSDLDATE" VERSION="1" LANGU="6" DESCRIPT="Datum rasporeðivanja koraka/posla" CMPTYPE="1" MTDTYPE="2" EDITORDER="4 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCSDLTIME" PAROPTIONL="X"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="CONSTRUCTOR" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom kreiranja posla" MTDTYPE="2" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000"/>
+  <source>METHOD constructor.
+  m_jobname = i_jobname.
+  m_jobcount = i_jobcount.
+  me-&gt;read( ).
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="CREATE" VERSION="1" LANGU="6" DESCRIPT="Create new job" EXPOSURE="2" STATE="1" EDITORDER="5 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="CREATE" SCONAME="I_JOBNAME" VERSION="1" LANGU="6" DESCRIPT="Naziv pozadinskog posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCJOB"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="CREATE" SCONAME="RE_JOB" VERSION="1" LANGU="6" DESCRIPT="Broj pozadinskog posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="3" TYPE="ZCL_JOB_UTIL"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="CREATE" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom kreiranja joba" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000"/>
+  <source>METHOD create.
+  DATA: l_jobcount TYPE btcjobcnt.
+  DATA: it_jobs  TYPE TABLE OF tbtcjob,
+        wa_job   TYPE tbtcjob.
+
+  wa_sel-jobname = i_jobname.
+  wa_sel-prelim = &apos;X&apos;.        &quot;scheduled
+  wa_sel-SCHEDUL = &apos;X&apos;.
+
+  CALL METHOD zcl_job_util=&gt;select
+    EXPORTING
+      i_param = wa_sel
+    IMPORTING
+      et_jobs = it_jobs
+    EXCEPTIONS
+      error   = 1
+      OTHERS  = 2.
+* create new only if scheduled job doesn&apos;t exists
+  if sy-subrc = 0.
+    RAISE error.
+  ENDIF.
+
+  CALL FUNCTION &apos;JOB_OPEN&apos;
+  EXPORTING
+*     DELANFREP              = &apos; &apos;
+*     JOBGROUP               = &apos; &apos;
+    jobname                =  i_jobname
+*     SDLSTRTDT              = NO_DATE
+*     SDLSTRTTM              = NO_TIME
+*     JOBCLASS               =
+ IMPORTING
+   jobcount                = l_jobcount
+*   CHANGING
+*     RET                    =
+ EXCEPTIONS
+   cant_create_job        = 1
+   invalid_job_data       = 2
+   jobname_missing        = 3
+   OTHERS                 = 4.
+
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4
+            RAISING error.
+  ENDIF.
+
+  CREATE OBJECT re_job
+    EXPORTING
+      i_jobname  = i_jobname
+      i_jobcount = l_jobcount
+    EXCEPTIONS
+      error      = 1.
+  IF sy-subrc = 1.
+    RAISE error.
+  ENDIF.
+  CLEAR: wa_sel.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="GET_SCHEDULED" VERSION="1" LANGU="6" DESCRIPT="Select first scheduled job matching name" EXPOSURE="2" STATE="1" EDITORDER="8 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDBY="DRIGER" CHANGEDON="20091027" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="GET_SCHEDULED" SCONAME="I_JOBNAME" VERSION="1" LANGU="6" DESCRIPT="Naziv pozadinskog posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCJOB"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="GET_SCHEDULED" SCONAME="R_JOB" VERSION="1" LANGU="6" DESCRIPT="Structure for Transferring Job Header Data (BI-API)" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="TBTCJOB"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="GET_SCHEDULED" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="No job found" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDON="00000000"/>
+  <source>METHOD get_scheduled.
+  DATA: it_jobs LIKE TABLE OF wa_job.
+
+  wa_sel-jobname = i_jobname.
+  wa_sel-prelim = &apos;X&apos;.        &quot;scheduled
+  CALL METHOD zcl_job_util=&gt;select
+    EXPORTING
+      i_param = wa_sel
+    IMPORTING
+      et_jobs = it_jobs
+    EXCEPTIONS
+      error   = 1.
+
+  IF it_jobs IS NOT INITIAL.
+    READ TABLE it_jobs INTO r_job INDEX 1.
+  ELSE.
+    RAISE error.
+  ENDIF.
+  CLEAR wa_sel.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="OPEN" VERSION="1" LANGU="6" DESCRIPT="Open existing job" EXPOSURE="2" STATE="1" EDITORDER="6 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="OPEN" SCONAME="I_JOBNAME" VERSION="1" LANGU="6" DESCRIPT="Naziv pozadinskog posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="TBTCJOB-JOBNAME"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="OPEN" SCONAME="I_JOBCOUNT" VERSION="1" LANGU="6" DESCRIPT="Broj pozadinskog posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDBY="DRIGER" CHANGEDON="20091028" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="TBTCJOB-JOBCOUNT" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="OPEN" SCONAME="RE_JOB" VERSION="1" LANGU="6" DESCRIPT="Batch jobovi" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="3" TYPE="ZCL_JOB_UTIL"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="OPEN" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška pri otvaranju posla" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000"/>
+  <source>METHOD open.
+  DATA: it_jobs  LIKE TABLE OF wa_job.
+
+  wa_sel-jobname = i_jobname.
+  if i_jobcount is SUPPLIED.
+    wa_sel-jobcount = i_jobcount.
+  ENDIF.
+  wa_sel-prelim = &apos;X&apos;.        &quot;scheduled
+  wa_sel-SCHEDUL = &apos;X&apos;.
+
+  CALL METHOD zcl_job_util=&gt;select
+    EXPORTING
+      i_param = wa_sel
+    IMPORTING
+      et_jobs = it_jobs
+    EXCEPTIONS
+      error   = 1
+      OTHERS  = 2.
+
+  IF sy-subrc &lt;&gt; 0.
+    RAISE error.
+  ELSE.
+    READ TABLE it_jobs INDEX 1 INTO wa_job.
+    CREATE OBJECT re_job
+      EXPORTING
+        i_jobname  = wa_job-jobname
+        i_jobcount = wa_job-jobcount.
+  ENDIF.
+  CLEAR: wa_sel, wa_job.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="READ" VERSION="1" LANGU="6" DESCRIPT="Read job details" EXPOSURE="1" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091022" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="READ" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom dohvata podataka joba" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000"/>
+  <source>METHOD read.
+  CALL FUNCTION &apos;BP_JOB_READ&apos;
+    EXPORTING
+      job_read_jobcount           = m_jobcount
+      job_read_jobname            = m_jobname
+      job_read_opcode             = 20
+*     JOB_STEP_NUMBER             =
+*   IMPORTING
+*     JOB_READ_JOBHEAD            =
+*     JOBLOG_ATTRIBUTES           =
+   TABLES
+     job_read_steplist           = mt_steplist
+*     SPOOL_ATTRIBUTES            =
+*   CHANGING
+*     RET                         =
+   EXCEPTIONS
+     invalid_opcode              = 1
+     job_doesnt_exist            = 2
+     job_doesnt_have_steps       = 3
+     OTHERS                      = 4
+            .
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    RAISE error.
+  ENDIF.
+
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="RELEASE" VERSION="1" LANGU="6" DESCRIPT="Save job as released" EXPOSURE="2" STATE="1" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="RELEASE" SCONAME="I_STRTDATE" VERSION="1" LANGU="6" DESCRIPT="Datum rasporeðivanja koraka/posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091022" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCSDLDATE"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="RELEASE" SCONAME="I_STRTTIME" VERSION="1" LANGU="6" DESCRIPT="Vrijeme rasporeðenog posla/koraka" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCSDLTIME"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="RELEASE" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000"/>
+  <source>METHOD release.
+  CALL FUNCTION &apos;JOB_CLOSE&apos;
+    EXPORTING
+*   AT_OPMODE                         = &apos; &apos;
+*   AT_OPMODE_PERIODIC                = &apos; &apos;
+*   CALENDAR_ID                       = &apos; &apos;
+*   EVENT_ID                          = &apos; &apos;
+*   EVENT_PARAM                       = &apos; &apos;
+*   EVENT_PERIODIC                    = &apos; &apos;
+      jobcount                          = m_jobcount
+      jobname                           = m_jobname
+*   LASTSTRTDT                        = NO_DATE
+*   LASTSTRTTM                        = NO_TIME
+*   PRDDAYS                           = 0
+*   PRDHOURS                          = 0
+*   PRDMINS                           = 0
+*   PRDMONTHS                         = 0
+*   PRDWEEKS                          = 0
+*   PREDJOB_CHECKSTAT                 = &apos; &apos;
+*   PRED_JOBCOUNT                     = &apos; &apos;
+*   PRED_JOBNAME                      = &apos; &apos;
+   SDLSTRTDT                         = i_strtdate
+   SDLSTRTTM                         = i_strttime
+*   STARTDATE_RESTRICTION             = BTC_PROCESS_ALWAYS
+*   STRTIMMED                         = &apos; &apos;
+*   TARGETSYSTEM                      = &apos; &apos;
+*   START_ON_WORKDAY_NOT_BEFORE       = SY-DATUM
+*   START_ON_WORKDAY_NR               = 0
+*   WORKDAY_COUNT_DIRECTION           = 0
+*   RECIPIENT_OBJ                     =
+*   TARGETSERVER                      = &apos; &apos;
+*   DONT_RELEASE                      = &apos; &apos;
+*   TARGETGROUP                       = &apos; &apos;
+*   DIRECT_START                      =
+* IMPORTING
+*   JOB_WAS_RELEASED                  =
+* CHANGING
+*   RET                               =
+   EXCEPTIONS
+     cant_start_immediate              = 1
+     invalid_startdate                 = 2
+     jobname_missing                   = 3
+     job_close_failed                  = 4
+     job_nosteps                       = 5
+     job_notex                         = 6
+     lock_failed                       = 7
+     invalid_target                    = 8
+     OTHERS                            = 9
+            .
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    RAISE error.
+  ENDIF.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="SAVE" VERSION="1" LANGU="6" DESCRIPT="Commit" EXPOSURE="1" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091022" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="SAVE" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom spremanja posla" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDON="00000000"/>
+  <source>METHOD save.
+  CALL FUNCTION &apos;JOB_CLOSE&apos;
+    EXPORTING
+*   AT_OPMODE                         = &apos; &apos;
+*   AT_OPMODE_PERIODIC                = &apos; &apos;
+*   CALENDAR_ID                       = &apos; &apos;
+*   EVENT_ID                          = &apos; &apos;
+*   EVENT_PARAM                       = &apos; &apos;
+*   EVENT_PERIODIC                    = &apos; &apos;
+      jobcount                          = m_jobcount
+      jobname                           = m_jobname
+*   LASTSTRTDT                        = NO_DATE
+*   LASTSTRTTM                        = NO_TIME
+*   PRDDAYS                           = 0
+*   PRDHOURS                          = 0
+*   PRDMINS                           = 0
+*   PRDMONTHS                         = 0
+*   PRDWEEKS                          = 0
+*   PREDJOB_CHECKSTAT                 = &apos; &apos;
+*   PRED_JOBCOUNT                     = &apos; &apos;
+*   PRED_JOBNAME                      = &apos; &apos;
+*   SDLSTRTDT                         = NO_DATE
+*   SDLSTRTTM                         = NO_TIME
+*   STARTDATE_RESTRICTION             = BTC_PROCESS_ALWAYS
+*   STRTIMMED                         = &apos; &apos;
+*   TARGETSYSTEM                      = &apos; &apos;
+*   START_ON_WORKDAY_NOT_BEFORE       = SY-DATUM
+*   START_ON_WORKDAY_NR               = 0
+*   WORKDAY_COUNT_DIRECTION           = 0
+*   RECIPIENT_OBJ                     =
+*   TARGETSERVER                      = &apos; &apos;
+*   DONT_RELEASE                      = &apos; &apos;
+*   TARGETGROUP                       = &apos; &apos;
+*   DIRECT_START                      =
+* IMPORTING
+*   JOB_WAS_RELEASED                  =
+* CHANGING
+*   RET                               =
+   EXCEPTIONS
+     cant_start_immediate              = 1
+     invalid_startdate                 = 2
+     jobname_missing                   = 3
+     job_close_failed                  = 4
+     job_nosteps                       = 5
+     job_notex                         = 6
+     lock_failed                       = 7
+     invalid_target                    = 8
+     OTHERS                            = 9
+            .
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    RAISE error.
+  ENDIF.
+
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="SCHEDULE" VERSION="1" LANGU="6" DESCRIPT="Save job as scheduled" EXPOSURE="2" STATE="1" EDITORDER="4 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091022" CHANGEDBY="DRIGER" CHANGEDON="20091023" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="SCHEDULE" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom spremanja posla" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091027" CHANGEDON="00000000"/>
+  <source>METHOD schedule.
+  CALL METHOD me-&gt;save
+    EXCEPTIONS
+      error  = 1
+      OTHERS = 2.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+               WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+  ENDIF.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_JOB_UTIL" CMPNAME="SELECT" VERSION="1" LANGU="6" DESCRIPT="Select existing jobs" EXPOSURE="2" STATE="1" EDITORDER="7 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="SELECT" SCONAME="I_PARAM" VERSION="1" LANGU="6" DESCRIPT="Struktura za parametar koji se proslij. za odabir posla" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDBY="DRIGER" CHANGEDON="20091023" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BTCSELECT"/>
+  <parameter CLSNAME="ZCL_JOB_UTIL" CMPNAME="SELECT" SCONAME="ET_JOBS" VERSION="1" LANGU="6" DESCRIPT="Batch Jobs (Table Type)" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDBY="DRIGER" CHANGEDON="20091023" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="CACS_TT_TBTCJOB"/>
+  <exception CLSNAME="ZCL_JOB_UTIL" CMPNAME="SELECT" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Posao ne postoji" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20091023" CHANGEDON="00000000"/>
+  <source>METHOD select.
+  CALL FUNCTION &apos;BP_JOB_SELECT&apos;
+    EXPORTING
+      jobselect_dialog          = &apos;N&apos;
+      jobsel_param_in           = i_param
+*     ENDDATE                   = &apos;        &apos;
+*     ENDTIME                   = &apos;      &apos;
+*     SELECTION                 = &apos;AL&apos;
+*   IMPORTING
+*     JOBSEL_PARAM_OUT          =
+    TABLES
+      jobselect_joblist         = et_jobs
+*     JOBNAME_EXT_SEL           =
+*     USERNAME_EXT_SEL          =
+*   CHANGING
+*     ERROR_CODE                =
+   EXCEPTIONS
+     invalid_dialog_type       = 1
+     jobname_missing           = 2
+     no_jobs_found             = 3
+     selection_canceled        = 4
+     username_missing          = 5.
+
+  IF sy-subrc &lt;&gt; 0 OR et_jobs IS INITIAL.
+    RAISE error.
+  ENDIF.
+ENDMETHOD.</source>
+ </method>
+</CLAS>

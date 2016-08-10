@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZCL_LOG" VERSION="1" LANGU="E" DESCRIPT="Protokol poruka PI suèelja" UUID="E11D0702EFA76AF1B036000C29A0A888" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="RIGERDAL" CREATEDON="20091210" CHANGEDBY="DRIGER" CHANGEDON="20111205" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="701" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 ">
+ <publicSection>class ZCL_LOG definition
+  public
+  final
+  create public .
+
+*&quot;* public components of class ZCL_LOG
+*&quot;* do not include other source files here!!!
+public section.
+
+  data M_LOG_HANDLE type BALLOGHNDL read-only .
+
+  class-methods CREATE_FROM_NAME
+    importing
+      value(IM_NAME) type CSEQUENCE
+    returning
+      value(RE_LOG) type ref to ZCL_LOG
+    exceptions
+      ERROR .
+  methods CONSTRUCTOR
+    importing
+      value(IM_LOG_HANDLE) type BALLOGHNDL
+    exceptions
+      ERROR .
+  methods ADD_MESSAGE
+    importing
+      !IS_MSG type BAL_S_MSG .
+  methods ADD_INFO_MESSAGE
+    importing
+      value(IM_MESSAGE) type CSEQUENCE .
+  methods ADD_ERROR_MESSAGE
+    importing
+      value(IM_MESSAGE) type CSEQUENCE .
+  methods ADD_SUCCESS_MESSAGE
+    importing
+      value(IM_MESSAGE) type CSEQUENCE .
+  methods ADD_WARNING_MESSAGE
+    importing
+      value(IM_MESSAGE) type CSEQUENCE .
+  methods ADD_LAST_MESSAGE .
+  methods ADD_BAPI_MESSAGE
+    importing
+      value(IS_BAPI_MESSAGE) type BAPIRET2 .
+  methods ADD_BAPI_MESSAGES
+    importing
+      !IT_BAPI_MESSAGES type BAPIRET2_TAB .
+  methods SAVE .
+  methods ADD_BDC_MESSTAB
+    importing
+      !IT_MESSTAB type ETTCD_MSG_TABTYPE .
+  methods ADD_BDC_MESSAGE
+    importing
+      !IM_BDC_MESSAGE type BDCMSGCOLL .
+  class-methods DISPLAY_LOG
+    importing
+      value(IM_LOG_NAME) type CSEQUENCE
+      value(IM_SUBOBJECT_NAME) type CSEQUENCE optional
+      value(IM_EXTNUMBER) type CSEQUENCE optional
+      value(IM_DATE_FROM) type DATS default SY-DATUM
+      value(IM_DATE_TO) type DATS optional
+      value(IM_SEARCH_TERM) type CSEQUENCE optional
+      value(IM_PROFILE) type BAL_S_PROF optional .
+  methods ADD_BAPI_MESSAGE_WITH_PREFIX
+    importing
+      value(IS_BAPI_MESSAGE) type BAPIRET2
+      value(IM_PREFIX) type CSEQUENCE .
+  methods ADD_BAPI_MESSAGES_WITH_PREFIX
+    importing
+      !IT_BAPI_MESSAGES type BAPIRET2_TAB
+      !IM_PREFIX type CSEQUENCE .
+  methods SET_DEFAULTS
+    importing
+      !I_TABNAME type BALTABNAME
+      !I_DATA type ANY .
+  methods GET_DEFAULTS
+    returning
+      value(R_S_MSG_DEFAULTS) type BAL_S_MDEF .
+  class-methods OPEN
+    importing
+      !IM_LOG_NAME type CSEQUENCE
+      !IM_EXTNUMBER type CSEQUENCE
+      !IM_SUBOBJECT type CSEQUENCE optional
+    returning
+      value(RE_LOG) type ref to ZCL_LOG
+    exceptions
+      ERROR .
+  class-methods BUILD_FCAT
+    importing
+      !I_TABNAME type BALTABNAME
+    returning
+      value(R_PROFILE) type BAL_S_PROF .
+  class-methods DISPLAY_BAPI_MESSAGES
+    importing
+      !IT_RETURN type BAPIRET2_TAB .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZCL_PI_LOG
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+ <privateSection>*&quot;* private components of class ZCL_LOG
+*&quot;* do not include other source files here!!!
+private section.
+
+  methods ADD_TEXT_AS_MESSAGE
+    importing
+      !IM_MESSAGE type CSEQUENCE
+      value(IM_TYPE) type SY-MSGTY .</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <attribute CLSNAME="ZCL_LOG" CMPNAME="M_LOG_HANDLE" VERSION="1" LANGU="6" DESCRIPT="Aplikacijski protokol: Handle protokola" EXPOSURE="2" STATE="1" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="BALLOGHNDL" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruku tipa BAPIRET2" EXPOSURE="2" STATE="1" EDITORDER="10 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGE" SCONAME="IS_BAPI_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Parametar povrata" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="BAPIRET2"/>
+  <source>METHOD add_bapi_message.
+  DATA ls_msg TYPE bal_s_msg.
+  ls_msg-msgty    = is_bapi_message-type.
+  ls_msg-msgid    = is_bapi_message-id.
+  ls_msg-msgno    = is_bapi_message-number.
+  ls_msg-msgv1    = is_bapi_message-message_v1.
+  ls_msg-msgv2    = is_bapi_message-message_v2.
+  ls_msg-msgv3    = is_bapi_message-message_v3.
+  ls_msg-msgv4    = is_bapi_message-message_v4.
+
+  SELECT COUNT(*) FROM t100 WHERE ARBGB = ls_msg-msgid.
+  IF sy-subrc &lt;&gt; 0.
+    ls_msg-msgv1 = is_bapi_message-message(50).
+    ls_msg-msgv2 = is_bapi_message-message+50(50).
+    ls_msg-msgv3 = is_bapi_message-message+100(50).
+    ls_msg-msgv4 = is_bapi_message-message+150(50).
+  ENDIF.
+  add_message( ls_msg ).
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGES" VERSION="1" LANGU="6" DESCRIPT="Dodaj tablicu tipa BAPIRET2" EXPOSURE="2" STATE="1" EDITORDER="11 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGES" SCONAME="IT_BAPI_MESSAGES" VERSION="1" LANGU="6" DESCRIPT="Poruke o greškama" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BAPIRET2_TAB"/>
+  <source>method ADD_BAPI_MESSAGES.
+    DATA wa_bapi_message TYPE bapiret2.
+    LOOP AT it_bapi_messages INTO wa_bapi_message.
+      add_bapi_message( wa_bapi_message ).
+    ENDLOOP.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGES_WITH_PREFIX" VERSION="1" LANGU="6" DESCRIPT="Dodaj tablicu tipa BAPIRET2" EXPOSURE="2" STATE="1" EDITORDER="17 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGES_WITH_PREFIX" SCONAME="IT_BAPI_MESSAGES" VERSION="1" LANGU="6" DESCRIPT="Poruke o greškama" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BAPIRET2_TAB"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGES_WITH_PREFIX" SCONAME="IM_PREFIX" VERSION="1" LANGU="6" DESCRIPT="Prefix" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <source>method ADD_BAPI_MESSAGES_WITH_PREFIX.
+  DATA wa_bapi_message TYPE bapiret2.
+  LOOP AT it_bapi_messages INTO wa_bapi_message.
+    add_bapi_message_with_prefix(
+      is_bapi_message = wa_bapi_message
+      im_prefix = im_prefix
+    ).
+  ENDLOOP.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGE_WITH_PREFIX" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruku tipa BAPIRET2" EXPOSURE="2" STATE="1" EDITORDER="16 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGE_WITH_PREFIX" SCONAME="IS_BAPI_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Parametar povrata" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="BAPIRET2"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BAPI_MESSAGE_WITH_PREFIX" SCONAME="IM_PREFIX" VERSION="1" LANGU="6" DESCRIPT="Prefix" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <source>method ADD_BAPI_MESSAGE_WITH_PREFIX.
+    DATA ls_msg TYPE bal_s_msg.
+
+    IF is_bapi_message-message IS INITIAL.
+       MESSAGE ID is_bapi_message-id
+               TYPE is_bapi_message-type
+               NUMBER is_bapi_message-number
+               WITH is_bapi_message-message_v1
+                    is_bapi_message-message_v2
+                    is_bapi_message-message_v3
+                    is_bapi_message-message_v4
+       INTO is_bapi_message-message.
+    ENDIF.
+
+    CONCATENATE im_prefix is_bapi_message-message INTO is_bapi_message-message
+    SEPARATED BY space.
+CALL METHOD me-&gt;add_text_as_message
+  EXPORTING
+    im_message = is_bapi_message-message
+    im_type    = is_bapi_message-type
+    .
+
+return.
+    MESSAGE ID &apos;ZXI&apos;
+            TYPE is_bapi_message-type
+            NUMBER &apos;000&apos;
+            WITH is_bapi_message-message(50)
+                 is_bapi_message-message+50(50)
+                 is_bapi_message-message+100(50)
+                 is_bapi_message-message+150(50)
+            INTO is_bapi_message-message.
+
+    add_last_message( ).
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_BDC_MESSAGE" VERSION="1" LANGU="6" EXPOSURE="2" STATE="1" EDITORDER="14 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BDC_MESSAGE" SCONAME="IM_BDC_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Prikupljanje poruka u SAP sustavu" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BDCMSGCOLL"/>
+  <source>method ADD_BDC_MESSAGE.
+  DATA ls_msg TYPE bal_s_msg.
+  ls_msg-msgty = im_bdc_message-msgtyp.
+  ls_msg-msgid = im_bdc_message-msgid.
+  ls_msg-msgno = im_bdc_message-msgnr.
+  ls_msg-msgv1 = im_bdc_message-msgv1.
+  ls_msg-msgv2 = im_bdc_message-msgv2.
+  ls_msg-msgv3 = im_bdc_message-msgv3.
+  ls_msg-msgv4 = im_bdc_message-msgv4.
+  add_message( ls_msg ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_BDC_MESSTAB" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruke od CALL TRANSACTION" EXPOSURE="2" STATE="1" EDITORDER="13 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_BDC_MESSTAB" SCONAME="IT_MESSTAB" VERSION="1" LANGU="6" DESCRIPT="Tabela poruka u transakciji" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ETTCD_MSG_TABTYPE"/>
+  <source>method ADD_BDC_MESSTAB.
+  DATA wa_message TYPE bdcmsgcoll.
+  LOOP AT it_messtab INTO wa_message.
+    add_bdc_message( wa_message ).
+  ENDLOOP.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_ERROR_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj grešku" EXPOSURE="2" STATE="1" EDITORDER="6 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_ERROR_MESSAGE" SCONAME="IM_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Vorschlagswerte bei Anlage von Debitoren aus Workbench" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <source>method ADD_ERROR_MESSAGE.
+  add_text_as_message(
+    im_message = im_message
+    im_type = &apos;E&apos;
+  ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_INFO_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj info poruku" EXPOSURE="2" STATE="1" EDITORDER="5 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_INFO_MESSAGE" SCONAME="IM_MESSAGE" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <source>method ADD_INFO_MESSAGE.
+  add_text_as_message(
+    im_message = im_message
+    im_type = &apos;I&apos;
+  ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_LAST_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruku u sy strukturi" EXPOSURE="2" STATE="1" EDITORDER="9 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method ADD_LAST_MESSAGE.
+    DATA ls_msg TYPE bal_s_msg.
+    ls_msg-msgty = sy-msgty.
+    ls_msg-msgid = sy-msgid.
+    ls_msg-msgno = sy-msgno.
+    ls_msg-msgv1 = sy-msgv1.
+    ls_msg-msgv2 = sy-msgv2.
+    ls_msg-msgv3 = sy-msgv3.
+    ls_msg-msgv4 = sy-msgv4.
+    add_message( ls_msg ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruku" EXPOSURE="2" STATE="1" EDITORDER="4 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_MESSAGE" SCONAME="IS_MSG" VERSION="1" LANGU="6" DESCRIPT="Protokol aplikacije: Podaci poruka" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BAL_S_MSG"/>
+  <source>METHOD add_message.
+
+*kontekst, radi pretraživanja
+
+  DATA ls_msg TYPE bal_s_msg.
+
+  ls_msg = is_msg.
+
+*driger 1.7.2009.  ***************************
+  DATA ls_mdef TYPE bal_s_mdef.
+  ls_mdef = get_defaults( ).
+  IF ls_mdef-context-tabname IS INITIAL.
+    ls_msg-context-tabname = &apos;ZMESSAGE&apos;.
+  ENDIF.
+*  ls_msg-context-tabname = &apos;ZMESSAGE&apos;. &quot;zakomentiro
+**********************************************
+  IF ls_msg-context-value IS INITIAL.
+    MESSAGE ID ls_msg-msgid TYPE ls_msg-msgty NUMBER ls_msg-msgno
+            WITH ls_msg-msgv1 ls_msg-msgv2 ls_msg-msgv3 ls_msg-msgv4
+            INTO ls_msg-context-value.
+  ENDIF.
+  CALL FUNCTION &apos;BAL_LOG_MSG_ADD&apos;
+    EXPORTING
+      i_log_handle = m_log_handle
+      i_s_msg      = ls_msg.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_SUCCESS_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruku o uspjehu" EXPOSURE="2" STATE="1" EDITORDER="7 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_SUCCESS_MESSAGE" SCONAME="IM_MESSAGE" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <source>method ADD_SUCCESS_MESSAGE.
+  add_text_as_message(
+    im_message = im_message
+    im_type = &apos;S&apos;
+  ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_TEXT_AS_MESSAGE" VERSION="1" LANGU="6" EXPOSURE="0" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_TEXT_AS_MESSAGE" SCONAME="IM_MESSAGE" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_TEXT_AS_MESSAGE" SCONAME="IM_TYPE" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="SY-MSGTY"/>
+  <source>method ADD_TEXT_AS_MESSAGE.
+  DATA l_message TYPE char200.
+  DATA ls_msg TYPE bal_s_msg.
+*  l_message = im_message.
+
+  DATA temptab TYPE string_table.
+  DATA tempstring TYPE string.
+  DATA msgvname TYPE string.
+  DATA newlen TYPE i.
+  DATA tempindex TYPE i.
+  SPLIT im_message AT space INTO TABLE temptab.
+  FIELD-SYMBOLS &lt;fs&gt; TYPE sy-msgv1.
+  DO 4 TIMES.
+    msgvname = sy-index.
+    CONCATENATE &apos;LS_MSG-MSGV&apos; msgvname INTO msgvname.
+    ASSIGN (msgvname) TO &lt;fs&gt;.
+    CLEAR l_message.
+    WHILE STRLEN( l_message ) &lt;= 50.
+      tempindex = tempindex + 1.
+      READ TABLE temptab INTO tempstring INDEX tempindex.
+      IF sy-subrc &lt;&gt; 0. EXIT. ENDIF.
+      newlen = STRLEN( l_message ) + STRLEN( tempstring ).
+      IF newlen &gt; 50.
+        tempindex = tempindex - 1.
+        EXIT.
+      ENDIF.
+      CONCATENATE l_message tempstring INTO l_message SEPARATED BY space.
+    ENDWHILE.
+    shift l_message LEFT DELETING LEADING space.
+    &lt;fs&gt; = l_message.
+  ENDDO.
+
+  ls_msg-msgty = im_type.
+  ls_msg-msgid = &apos;ZXI&apos;.
+  ls_msg-msgno = &apos;000&apos;.
+*  ls_msg-msgv1 = l_message(50).
+*  ls_msg-msgv2 = l_message+50(50).
+*  ls_msg-msgv3 = l_message+100(50).
+*  ls_msg-msgv4 = l_message+150(50).
+  add_message( ls_msg ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="ADD_WARNING_MESSAGE" VERSION="1" LANGU="6" DESCRIPT="Dodaj poruku upozorenja" EXPOSURE="2" STATE="1" EDITORDER="8 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="ADD_WARNING_MESSAGE" SCONAME="IM_MESSAGE" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <source>method ADD_WARNING_MESSAGE.
+  add_text_as_message(
+    im_message = im_message
+    im_type = &apos;W&apos;
+  ).
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="BUILD_FCAT" VERSION="1" LANGU="6" DESCRIPT="Build fcat for context structure" EXPOSURE="2" STATE="1" EDITORDER="21 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111205" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="BUILD_FCAT" SCONAME="I_TABNAME" VERSION="1" LANGU="6" DESCRIPT="Application Log: Context: DDIC structure name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111205" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BALTABNAME"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="BUILD_FCAT" SCONAME="R_PROFILE" VERSION="1" LANGU="6" DESCRIPT="Application Log: Log Output Format Profile" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111205" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="BAL_S_PROF"/>
+  <source>METHOD build_fcat.
+  DATA: lt_dd03l TYPE TABLE OF dd03l,
+        l_s_fcat TYPE bal_s_fcat.
+  FIELD-SYMBOLS &lt;ddd03l&gt; LIKE LINE OF lt_dd03l.
+
+  CALL FUNCTION &apos;BAL_DSP_PROFILE_POPUP_GET&apos;
+    IMPORTING
+      e_s_display_profile = r_profile.
+
+  r_profile-use_grid = &apos;X&apos;.
+  &quot;r_profile-end_col = 110.
+  &quot;r_profile-end_row = 100.
+  r_profile-cwidth_opt = &apos;X&apos;.
+
+  SELECT * FROM dd03l INTO TABLE lt_dd03l
+    WHERE tabname = i_tabname.
+  SORT lt_dd03l BY position.
+
+  LOOP AT lt_dd03l ASSIGNING &lt;ddd03l&gt;.
+    l_s_fcat-ref_table = i_tabname.
+    l_s_fcat-ref_field = &lt;ddd03l&gt;-fieldname.
+
+    CASE &lt;ddd03l&gt;-fieldname.
+      WHEN &apos;ERNAM&apos; OR &apos;ERDAT&apos; OR &apos;ERZET&apos; OR
+           &apos;CRUSR&apos; OR &apos;CRDAT&apos; OR &apos;CRTIM&apos;.
+        l_s_fcat-col_pos = 100 + sy-tabix.
+    ENDCASE.
+
+    APPEND l_s_fcat TO r_profile-mess_fcat.
+    CLEAR l_s_fcat.
+  ENDLOOP.
+
+  r_profile-disvariant-report = sy-repid.
+  r_profile-disvariant-handle = &apos;LOG&apos;.
+
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="CONSTRUCTOR" VERSION="1" LANGU="6" DESCRIPT="Konstruktor" EXPOSURE="2" STATE="1" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="2" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="CONSTRUCTOR" SCONAME="IM_LOG_HANDLE" VERSION="1" LANGU="6" DESCRIPT="Protokol aplikacije: Podaci zaglavlja protokola" CMPTYPE="1" MTDTYPE="2" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="BALLOGHNDL"/>
+  <exception CLSNAME="ZCL_LOG" CMPNAME="CONSTRUCTOR" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška pri kreiranju aplikacijskog loga" MTDTYPE="2" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205"/>
+  <source>method CONSTRUCTOR.
+*  CALL FUNCTION &apos;BAL_LOG_CREATE&apos;
+*    EXPORTING
+*      i_s_log                 = im_s_log
+*    IMPORTING
+*      e_log_handle            = m_log_handle
+*    EXCEPTIONS
+*      log_header_inconsistent = 1
+*      OTHERS                  = 2.
+*  IF sy-subrc &lt;&gt; 0.
+*    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+*            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4
+*            RAISING error.
+*  ENDIF.
+  m_log_handle = im_log_handle.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="CREATE_FROM_NAME" VERSION="1" LANGU="6" DESCRIPT="Kreiraj objekt koristeæi ime aplikacijskog loga" EXPOSURE="2" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="CREATE_FROM_NAME" SCONAME="IM_NAME" VERSION="1" LANGU="6" DESCRIPT="Ime protokola" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="CREATE_FROM_NAME" SCONAME="RE_LOG" VERSION="1" LANGU="6" DESCRIPT="Protokol poruka PI suèelja" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="3" TYPE="ZCL_LOG"/>
+  <exception CLSNAME="ZCL_LOG" CMPNAME="CREATE_FROM_NAME" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205"/>
+  <source>method CREATE_FROM_NAME.
+  DATA lf_log_handle LIKE m_log_handle.
+  DATA ls_log TYPE bal_s_log.
+
+  ls_log-object = im_name.
+  CALL FUNCTION &apos;BAL_LOG_CREATE&apos;
+    EXPORTING
+      i_s_log                 = ls_log
+    IMPORTING
+      e_log_handle            = lf_log_handle
+    EXCEPTIONS
+      log_header_inconsistent = 1
+      OTHERS                  = 2.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4
+            RAISING error.
+  ENDIF.
+
+  CREATE OBJECT re_log
+    EXPORTING
+      im_log_handle = lf_log_handle
+    EXCEPTIONS
+      error = 1.
+  IF sy-subrc = 1.
+    RAISE error.
+  ENDIF.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_BAPI_MESSAGES" VERSION="1" LANGU="6" DESCRIPT="Display bapiret2 withot saving" EXPOSURE="2" STATE="1" EDITORDER="22 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20120313" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_BAPI_MESSAGES" SCONAME="IT_RETURN" VERSION="1" LANGU="6" DESCRIPT="Error Messages" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20120313" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BAPIRET2_TAB"/>
+  <source>METHOD display_bapi_messages.
+  DATA: g_s_log             TYPE bal_s_log,
+        l_s_msg             TYPE bal_s_msg,
+        l_s_display_profile TYPE  bal_s_prof,
+        lf_loghndl          TYPE balloghndl,
+        lt_handle           TYPE bal_t_logh.
+
+  FIELD-SYMBOLS: &lt;return&gt; LIKE LINE OF it_return.
+
+  g_s_log-extnumber = &apos;ZEMO Log&apos;.                           &quot;#EC NOTEXT
+  g_s_log-aluser    = sy-uname.
+  g_s_log-alprog    = sy-repid.
+
+  CALL FUNCTION &apos;BAL_LOG_CREATE&apos;
+    EXPORTING
+      i_s_log      = g_s_log
+    IMPORTING
+      e_log_handle = lf_loghndl
+    EXCEPTIONS
+      OTHERS       = 1.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+    WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+  ENDIF.
+
+  APPEND lf_loghndl TO lt_handle.
+
+*  CALL FUNCTION &apos;BAL_LOG_REFRESH&apos;
+*    EXPORTING
+*      i_log_handle = lf_loghndl
+*    EXCEPTIONS
+*      OTHERS       = 1.
+*  IF sy-subrc &lt;&gt; 0.
+*    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+*    WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+*  ENDIF.
+
+  LOOP AT it_return ASSIGNING &lt;return&gt;.
+    l_s_msg-msgty     = &lt;return&gt;-type.
+    l_s_msg-msgid     = &lt;return&gt;-id.
+    l_s_msg-msgno     = &lt;return&gt;-number.
+    l_s_msg-msgv1     = &lt;return&gt;-message_v1.
+    l_s_msg-msgv2     = &lt;return&gt;-message_v2.
+    l_s_msg-msgv3     = &lt;return&gt;-message_v3.
+    l_s_msg-msgv4     = &lt;return&gt;-message_v4.
+    SELECT COUNT(*) FROM t100 WHERE arbgb = &lt;return&gt;-id.
+    IF sy-subrc &lt;&gt; 0.
+      l_s_msg-msgv1 = &lt;return&gt;-message(50).
+      l_s_msg-msgv2 = &lt;return&gt;-message+50(50).
+      l_s_msg-msgv3 = &lt;return&gt;-message+100(50).
+      l_s_msg-msgv4 = &lt;return&gt;-message+150(50).
+    ENDIF.
+*    l_s_msg-probclass = i_probclass.
+
+    CALL FUNCTION &apos;BAL_LOG_MSG_ADD&apos;
+      EXPORTING
+        i_s_msg       = l_s_msg
+        i_log_handle  = lf_loghndl
+      EXCEPTIONS
+        log_not_found = 0
+        OTHERS        = 1.
+    IF sy-subrc &lt;&gt; 0.
+      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+      WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    ENDIF.
+  ENDLOOP.
+
+  CALL FUNCTION &apos;BAL_DSP_PROFILE_POPUP_GET&apos;
+    IMPORTING
+      e_s_display_profile = l_s_display_profile
+    EXCEPTIONS
+      OTHERS              = 1.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+    WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+  ENDIF.
+
+  CALL FUNCTION &apos;BAL_DSP_LOG_DISPLAY&apos;
+    EXPORTING
+      i_s_display_profile = l_s_display_profile
+      i_t_log_handle      = lt_handle
+    EXCEPTIONS
+      OTHERS              = 1.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE &apos;S&apos; NUMBER sy-msgno
+    WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+  ENDIF.
+
+  CALL FUNCTION &apos;BAL_LOG_REFRESH&apos;
+    EXPORTING
+      i_log_handle = lf_loghndl
+    EXCEPTIONS
+      OTHERS       = 1.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+  ENDIF.
+
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" VERSION="1" LANGU="6" DESCRIPT="Prikaži protokol u skoènom prozoru" EXPOSURE="2" STATE="1" EDITORDER="15 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_LOG_NAME" VERSION="1" LANGU="6" DESCRIPT="Aplikacijski protokol: naziv objekta (aplikacijska šifra)" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_SUBOBJECT_NAME" VERSION="1" LANGU="6" DESCRIPT="Aplikacijski protokol: Podobjekt" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_EXTNUMBER" VERSION="1" LANGU="6" DESCRIPT="Version Number Component" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_DATE_FROM" VERSION="1" LANGU="6" DESCRIPT="Od datuma" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="DATS" PARVALUE="SY-DATUM"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_DATE_TO" VERSION="1" LANGU="6" DESCRIPT="Do datuma" CMPTYPE="1" MTDTYPE="0" EDITORDER="5 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="DATS" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_SEARCH_TERM" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="6 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="CSEQUENCE" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="DISPLAY_LOG" SCONAME="IM_PROFILE" VERSION="1" LANGU="6" DESCRIPT="Application Log: Log Output Format Profile" CMPTYPE="1" MTDTYPE="0" EDITORDER="7 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="BAL_S_PROF" PAROPTIONL="X"/>
+  <source>METHOD display_log.
+  DATA:
+    ls_object                   TYPE bal_s_obj,
+    ls_subobject                TYPE bal_s_sub,
+    ls_extnumber                TYPE bal_s_extn,
+    ls_log_filter               TYPE bal_s_lfil.
+
+  IF im_date_from IS INITIAL.
+    im_date_from = im_date_to.
+  ENDIF.
+
+  ls_object-sign   = &apos;I&apos;.
+  ls_object-option = &apos;EQ&apos;.
+  ls_object-low    = im_log_name.
+  APPEND ls_object TO ls_log_filter-object.
+
+  IF NOT im_subobject_name IS INITIAL.
+    ls_subobject-sign   = &apos;I&apos;.
+    ls_subobject-option = &apos;EQ&apos;.
+    ls_subobject-low    = im_subobject_name.
+    APPEND ls_subobject TO ls_log_filter-subobject.
+  ENDIF.
+  IF im_extnumber IS SUPPLIED.
+    ls_extnumber-sign   = &apos;I&apos;.
+    ls_extnumber-option = &apos;EQ&apos;.
+    ls_extnumber-low    = im_extnumber.
+    APPEND ls_extnumber TO ls_log_filter-extnumber.
+  ELSE.
+    ls_log_filter-date_time-date_from = im_date_from.
+    ls_log_filter-date_time-date_to   = im_date_to.
+  ENDIF.
+  DATA it_log_header TYPE balhdr_t.
+  DATA wa_log_header LIKE LINE OF it_log_header.
+  DATA lt_log_hande  TYPE bal_t_logh.
+
+  CALL FUNCTION &apos;BAL_DB_SEARCH&apos;
+    EXPORTING
+      i_s_log_filter = ls_log_filter
+    IMPORTING
+      e_t_log_header = it_log_header
+    EXCEPTIONS
+      OTHERS         = 0.
+
+  CALL FUNCTION &apos;BAL_DB_LOAD&apos;
+    EXPORTING
+      i_t_log_header = it_log_header
+    EXCEPTIONS
+      OTHERS         = 0.
+
+  DATA:
+    ls_display_profile TYPE bal_s_prof.
+
+  IF im_profile IS SUPPLIED.
+    ls_display_profile = im_profile.
+  ELSE.
+    CALL FUNCTION &apos;BAL_DSP_PROFILE_POPUP_GET&apos;
+      IMPORTING
+        e_s_display_profile = ls_display_profile
+      EXCEPTIONS
+        OTHERS              = 1.
+    IF sy-subrc &lt;&gt; 0.
+      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+               WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    ENDIF.
+
+    ls_display_profile-use_grid = &apos;X&apos;.
+    ls_display_profile-disvariant-report = sy-repid.
+    ls_display_profile-disvariant-handle = &apos;LOG&apos;.
+
+    DATA:
+        lt_context_filter  TYPE bal_t_cfil,
+        ls_context_filter  TYPE bal_s_cfil,
+        ls_range           TYPE bal_rfield.
+
+
+* define field
+    ls_context_filter-tabname   = &apos;ZMESSAGE&apos;.
+    ls_context_filter-fieldname = &apos;TEXT&apos;.
+* define airlines
+    ls_range-option   = &apos;CP&apos;.
+    ls_range-sign     = &apos;I&apos;.
+    ls_range-low      = im_search_term.
+    CONCATENATE &apos;*&apos; ls_range-low &apos;*&apos; INTO ls_range-low.
+    APPEND ls_range TO ls_context_filter-t_range.
+
+    APPEND ls_context_filter TO lt_context_filter.
+  ENDIF.
+
+  LOOP AT it_log_header INTO wa_log_header.
+    APPEND wa_log_header-log_handle TO lt_log_hande.
+  ENDLOOP.
+
+  CALL FUNCTION &apos;BAL_DSP_LOG_DISPLAY&apos;
+    EXPORTING
+      i_s_display_profile          = ls_display_profile
+      i_t_log_handle               = lt_log_hande
+*             I_T_MSG_HANDLE               =
+*             I_S_LOG_FILTER               =
+*              I_S_MSG_FILTER               = ls_msg_filter
+*             I_T_LOG_CONTEXT_FILTER       =
+      i_t_msg_context_filter       = lt_context_filter
+*             I_AMODAL                     = &apos; &apos;
+*             I_SRT_BY_TIMSTMP             = &apos; &apos;
+*           IMPORTING
+*             E_S_EXIT_COMMAND             =
+    EXCEPTIONS
+     profile_inconsistent         = 1
+     internal_error               = 2
+     no_data_available            = 3
+     no_authority                 = 4
+     OTHERS                       = 5
+            .
+  IF sy-subrc &lt;&gt; 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+  LOOP AT it_log_header INTO wa_log_header.
+    CALL FUNCTION &apos;BAL_LOG_REFRESH&apos;
+      EXPORTING
+        i_log_handle  = wa_log_header-log_handle
+      EXCEPTIONS
+        log_not_found = 1.
+  ENDLOOP.
+
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="GET_DEFAULTS" VERSION="1" LANGU="6" DESCRIPT="Get message defaults" EXPOSURE="2" STATE="1" EDITORDER="19 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="GET_DEFAULTS" SCONAME="R_S_MSG_DEFAULTS" VERSION="1" LANGU="6" DESCRIPT="Protokol aplikacije: Preddefinirane poruke" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="BAL_S_MDEF"/>
+  <source>method GET_DEFAULTS.
+  CALL FUNCTION &apos;BAL_GLB_MSG_DEFAULTS_GET&apos;
+    IMPORTING
+      e_s_msg_defaults = r_s_msg_defaults.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="OPEN" VERSION="1" LANGU="6" DESCRIPT="Otvori postojeæi ili kreiraj novi log" EXPOSURE="2" STATE="1" EDITORDER="20 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="OPEN" SCONAME="IM_LOG_NAME" VERSION="1" LANGU="6" DESCRIPT="Application Log: Log header data" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="OPEN" SCONAME="IM_EXTNUMBER" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="OPEN" SCONAME="IM_SUBOBJECT" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="CSEQUENCE" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="OPEN" SCONAME="RE_LOG" VERSION="1" LANGU="6" DESCRIPT="Protokol poruka PI suèelja" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="3" TYPE="ZCL_LOG"/>
+  <exception CLSNAME="ZCL_LOG" CMPNAME="OPEN" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška prilikom otvaranja aplikacijskog loga" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205"/>
+  <source>method OPEN.
+  DATA: lt_logheader  TYPE balhdr_t,
+        lf_log_handle TYPE balloghndl.
+  FIELD-SYMBOLS: &lt;logheader&gt; TYPE balhdr.
+  DATA:
+    ls_log                      TYPE bal_s_log,
+    ls_object                   TYPE bal_s_obj,
+    ls_subobject                TYPE bal_s_sub,
+    ls_extnumber                TYPE bal_s_extn,
+    ls_log_filter               TYPE bal_s_lfil.
+
+  ls_object-sign   = &apos;I&apos;.
+  ls_object-option = &apos;EQ&apos;.
+  ls_object-low    = im_log_name.
+  APPEND ls_object TO ls_log_filter-object.
+
+  IF im_subobject IS SUPPLIED.
+    ls_subobject-sign   = &apos;I&apos;.
+    ls_subobject-option = &apos;EQ&apos;.
+    ls_subobject-low    = im_subobject.
+    APPEND ls_subobject TO ls_log_filter-subobject.
+  ENDIF.
+
+  ls_extnumber-sign   = &apos;I&apos;.
+  ls_extnumber-option = &apos;EQ&apos;.
+  ls_extnumber-low    = im_extnumber.
+  APPEND ls_extnumber TO ls_log_filter-extnumber.
+
+  CALL FUNCTION &apos;BAL_DB_SEARCH&apos;
+    EXPORTING
+*     I_CLIENT                 = SY-MANDT
+      i_s_log_filter           = ls_log_filter
+   IMPORTING
+     e_t_log_header           = lt_logheader
+   EXCEPTIONS
+     log_not_found            = 1
+     no_filter_criteria       = 2
+     OTHERS                   = 3.
+  IF sy-subrc = 0.
+    CALL FUNCTION &apos;BAL_DB_LOAD&apos;
+      EXPORTING
+        i_t_log_header = lt_logheader
+      EXCEPTIONS
+        OTHERS         = 0.
+
+    READ TABLE lt_logheader INDEX 1 ASSIGNING &lt;logheader&gt;.
+    CHECK sy-subrc = 0.
+    lf_log_handle = &lt;logheader&gt;-log_handle.
+  ELSE.
+    ls_log-object = im_log_name.
+    ls_log-subobject = im_subobject.
+    ls_log-extnumber = im_extnumber.
+    CALL FUNCTION &apos;BAL_LOG_CREATE&apos;
+      EXPORTING
+        i_s_log                 = ls_log
+      IMPORTING
+        e_log_handle            = lf_log_handle
+      EXCEPTIONS
+        log_header_inconsistent = 1
+        OTHERS                  = 2.
+  ENDIF.
+  IF sy-subrc &lt;&gt; 0.
+    MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4
+            RAISING error.
+  ENDIF.
+
+  CREATE OBJECT re_log
+    EXPORTING
+      im_log_handle = lf_log_handle
+    EXCEPTIONS
+      error = 1.
+  IF sy-subrc = 1.
+    RAISE error.
+  ENDIF.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="SAVE" VERSION="1" LANGU="6" DESCRIPT="Spremi u bazu" EXPOSURE="2" STATE="1" EDITORDER="12 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAVE.
+  CALL FUNCTION &apos;BAL_DB_SAVE&apos;
+    EXPORTING
+*   I_CLIENT               = SY-MANDT
+*   I_IN_UPDATE_TASK       = &apos; &apos;
+      i_save_all             = &apos;X&apos;
+*   I_T_LOG_HANDLE         =
+* IMPORTING
+*   E_NEW_LOGNUMBERS       =
+* EXCEPTIONS
+*   LOG_NOT_FOUND          = 1
+*   SAVE_NOT_ALLOWED       = 2
+*   NUMBERING_ERROR        = 3
+*   OTHERS                 = 4
+            .
+  IF sy-subrc &lt;&gt; 0.
+* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*         WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_LOG" CMPNAME="SET_DEFAULTS" VERSION="1" LANGU="6" DESCRIPT="Set message defaults" EXPOSURE="2" STATE="1" EDITORDER="18 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="SET_DEFAULTS" SCONAME="I_TABNAME" VERSION="1" LANGU="6" DESCRIPT="Protokol aplikacije: Kontekst: DDIC naziv strukture" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BALTABNAME"/>
+  <parameter CLSNAME="ZCL_LOG" CMPNAME="SET_DEFAULTS" SCONAME="I_DATA" VERSION="1" LANGU="6" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20111122" CHANGEDBY="DRIGER" CHANGEDON="20111205" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+  <source>method SET_DEFAULTS.
+  DATA: l_s_mdef TYPE bal_s_mdef.
+
+  l_s_mdef-log_handle = m_log_handle.
+  l_s_mdef-context-tabname = i_tabname.
+  l_s_mdef-context-value   = i_data.
+
+  CALL FUNCTION &apos;BAL_GLB_MSG_DEFAULTS_SET&apos;
+    EXPORTING
+      i_s_msg_defaults = l_s_mdef
+    EXCEPTIONS
+      OTHERS           = 0.
+endmethod.</source>
+ </method>
+</CLAS>

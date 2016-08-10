@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<CLAS CLSNAME="ZCL_BDC_UTIL" VERSION="1" LANGU="E" UUID="4A43E508D74CD54595C9C5D2FAF69F8C" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="620" CLSBCCAT="00">
+ <publicSection>class ZCL_BDC_UTIL definition
+  public
+  final
+  create public .
+
+*&quot;* public components of class ZCL_BDC_UTIL
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods BDC_DYNPRO
+    importing
+      !IF_PROGRAM type BDC_PROG
+      !IF_DYNPRO type BDC_DYNR .
+  methods BDC_FIELD
+    importing
+      !IF_FNAM type FNAM_____4
+      !IF_FVAL type DATA .
+  class-methods GENERATE_CODE
+    importing
+      !IF_RECORDING type APQ_GRPN
+      !IF_INSTANCE type SEOCLSNAME
+    exporting
+      !ET_CODE type TAB_CHAR512 .
+  methods CALL_TRANSACTION
+    importing
+      !IF_TCODE type TCODE
+    exporting
+      !ET_MESSTAB type ETTCD_MSG_TABTYPE .
+  methods CONSTRUCTOR .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZCL_BDC_UTIL
+*&quot;* do not include other source files here!!!
+protected section.
+
+  data MT_BDCDATA type BDCDATA_TAB .
+  data MF_TCODE type TCODE .
+  constants MC_NODATA type CHAR1 value &apos;/&apos;. &quot;#EC NOTEXT
+  data MT_MESSTAB type ETTCD_MSG_TABTYPE .</protectedSection>
+ <privateSection>*&quot;* private components of class ZCL_BDC_UTIL
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <attribute CLSNAME="ZCL_BDC_UTIL" CMPNAME="MC_NODATA" VERSION="1" LANGU="E" DESCRIPT="Single-character flag" EXPOSURE="1" STATE="1" EDITORDER="3 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" ATTDECLTYP="2" ATTVALUE="&apos;/&apos;" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CHAR1" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="620"/>
+ <attribute CLSNAME="ZCL_BDC_UTIL" CMPNAME="MF_TCODE" VERSION="1" LANGU="E" DESCRIPT="Transaction Code" EXPOSURE="1" STATE="1" EDITORDER="2 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="TCODE" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="620"/>
+ <attribute CLSNAME="ZCL_BDC_UTIL" CMPNAME="MT_BDCDATA" VERSION="1" LANGU="E" DESCRIPT="Table Type for BDCDATA" EXPOSURE="1" STATE="1" EDITORDER="1 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="BDCDATA_TAB" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="620"/>
+ <attribute CLSNAME="ZCL_BDC_UTIL" CMPNAME="MT_MESSTAB" VERSION="1" LANGU="E" DESCRIPT="Message Table in Transaction" EXPOSURE="1" STATE="1" EDITORDER="4 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ETTCD_MSG_TABTYPE" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="620"/>
+ <method CLSNAME="ZCL_BDC_UTIL" CMPNAME="BDC_DYNPRO" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDBY="RIGERDAL" CHANGEDON="20110512" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="620" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="BDC_DYNPRO" SCONAME="IF_PROGRAM" VERSION="1" LANGU="E" DESCRIPT="BDC module pool" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BDC_PROG"/>
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="BDC_DYNPRO" SCONAME="IF_DYNPRO" VERSION="1" LANGU="E" DESCRIPT="BDC Screen number" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="BDC_DYNR"/>
+  <source>METHOD bdc_dynpro .
+  DATA: ls_bdcdata LIKE LINE OF mt_bdcdata.
+  ls_bdcdata-program  = if_program.
+  ls_bdcdata-dynpro   = if_dynpro.
+  ls_bdcdata-dynbegin = &apos;X&apos;.
+  APPEND ls_bdcdata TO mt_bdcdata.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BDC_UTIL" CMPNAME="BDC_FIELD" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDBY="RIGERDAL" CHANGEDON="20110512" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="620" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="BDC_FIELD" SCONAME="IF_FNAM" VERSION="1" LANGU="E" DESCRIPT="Field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="FNAM_____4"/>
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="BDC_FIELD" SCONAME="IF_FVAL" VERSION="1" LANGU="E" DESCRIPT="BDC field value" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDBY="RIGERDAL" CHANGEDON="20110512" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="DATA"/>
+  <source>METHOD bdc_field .
+  DATA: lf_fval TYPE bdc_fval,
+        lf_type.
+
+  DESCRIBE FIELD if_fval TYPE lf_type.
+  IF lf_type CA &apos;PF&apos;.
+    WRITE if_fval TO lf_fval.
+    CONDENSE lf_fval.
+  else.
+    lf_fval = if_fval.
+  ENDIF.
+
+  IF lf_fval &lt;&gt; mc_nodata.
+    DATA ls_bdcdata LIKE LINE OF mt_bdcdata.
+    ls_bdcdata-fnam = if_fnam.
+    ls_bdcdata-fval = lf_fval.
+    APPEND ls_bdcdata TO mt_bdcdata.
+  ENDIF.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BDC_UTIL" CMPNAME="CALL_TRANSACTION" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="4 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDBY="RIGERDAL" CHANGEDON="20110512" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="620" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="CALL_TRANSACTION" SCONAME="IF_TCODE" VERSION="1" LANGU="E" DESCRIPT="Transaction Code" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="TCODE"/>
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="CALL_TRANSACTION" SCONAME="ET_MESSTAB" VERSION="1" LANGU="E" DESCRIPT="Message Table in Transaction" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ETTCD_MSG_TABTYPE"/>
+  <source>METHOD call_transaction .
+  DATA: lf_ctumode VALUE &apos;N&apos;.
+  &quot;A: show all dynpros
+  &quot;E: show dynpro on error only
+  &quot;N: do not display dynpro
+  DATA: lf_cupdate VALUE &apos;L&apos;.
+  &quot;S: synchronously
+  &quot;A: asynchronously
+  &quot;L: local
+
+  REFRESH et_messtab.
+  CALL TRANSACTION if_tcode USING mt_bdcdata
+        MODE   lf_ctumode
+        UPDATE lf_cupdate
+        MESSAGES INTO et_messtab.
+  REFRESH mt_bdcdata.
+ENDMETHOD.</source>
+ </method>
+ <method CLSNAME="ZCL_BDC_UTIL" CMPNAME="CONSTRUCTOR" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="5 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" MTDTYPE="2" MTDDECLTYP="0" R3RELEASE="620" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method CONSTRUCTOR .
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZCL_BDC_UTIL" CMPNAME="GENERATE_CODE" VERSION="1" LANGU="E" DESCRIPT="Generate code from recording" EXPOSURE="2" STATE="1" EDITORDER="3 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="620" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="GENERATE_CODE" SCONAME="IF_RECORDING" VERSION="1" LANGU="E" DESCRIPT="Group name: Batch input session name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="APQ_GRPN"/>
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="GENERATE_CODE" SCONAME="IF_INSTANCE" VERSION="1" LANGU="E" DESCRIPT="Object Type Name" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="SEOCLSNAME"/>
+  <parameter CLSNAME="ZCL_BDC_UTIL" CMPNAME="GENERATE_CODE" SCONAME="ET_CODE" VERSION="1" LANGU="E" DESCRIPT="Table of the Data Type CHAR with 512 Characters" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="RIGERDAL" CREATEDON="20110512" CHANGEDBY="RIGERDAL" CHANGEDON="20110512" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="TAB_CHAR512"/>
+  <source>METHOD generate_code .
+  DATA: lf_qid TYPE apq_quid,
+        lt_bdcdata TYPE  bdcdata_tab,
+        ls_code LIKE LINE OF et_code.
+
+  DATA: field_name(30) VALUE &apos;(SAPLSBDR)BDC_TAB[]&apos;.
+
+  FIELD-SYMBOLS: &lt;fs&gt; LIKE lt_bdcdata.
+  FIELD-SYMBOLS: &lt;data&gt; LIKE LINE OF lt_bdcdata,
+                 &lt;code&gt; LIKE LINE OF et_code.
+
+  SELECT SINGLE qid FROM apqi
+    INTO lf_qid
+    WHERE datatyp = &apos;%BDC&apos; AND
+          groupid = if_recording.
+
+
+  CALL FUNCTION &apos;BDC_RECORD_OPEN&apos;
+    EXPORTING
+      queue_id  = lf_qid
+      name      = if_recording
+    TABLES
+      dynprotab = lt_bdcdata
+    EXCEPTIONS
+      OTHERS    = 1.
+
+  ASSIGN (field_name) TO &lt;fs&gt;.
+  &quot;get REFERENCE OF  into data.
+
+  LOOP AT &lt;fs&gt; ASSIGNING &lt;data&gt;.
+    CASE &lt;data&gt;-dynbegin.
+      WHEN &apos;T&apos;.
+        &quot;mf_tcode = &lt;data&gt;-fnam.
+        CONCATENATE: if_instance &apos;-&gt;call_transaction( EXPORTING if_tcode = &apos;&apos;&apos; &lt;data&gt;-fnam &apos;&apos;&apos; IMPORTING et_messtab = lt_messtab ).&apos; INTO ls_code.
+        CONDENSE ls_code.
+      WHEN &apos;X&apos;.
+        APPEND INITIAL LINE TO et_code ASSIGNING &lt;code&gt;.
+        CONCATENATE: if_instance &apos;-&gt;bdc_dynpro( if_program = &apos;&apos;&apos; &lt;data&gt;-program &apos;&apos;&apos; if_dynpro = &apos;&apos;&apos; &lt;data&gt;-dynpro &apos;&apos;&apos; ).&apos; INTO &lt;code&gt;.&quot; SEPARATED BY space.
+        CONDENSE &lt;code&gt;.
+      WHEN OTHERS.
+        APPEND INITIAL LINE TO et_code ASSIGNING &lt;code&gt;.
+        CONCATENATE: if_instance &apos;-&gt;bdc_field( if_fnam = &apos;&apos;&apos; &lt;data&gt;-fnam &apos;&apos;&apos; if_fval = &apos;&apos;&apos; &lt;data&gt;-fval &apos;&apos;&apos; ).&apos; INTO &lt;code&gt;.&quot; SEPARATED BY space.
+        CONDENSE &lt;code&gt;.
+    ENDCASE.
+  ENDLOOP.
+  IF ls_code IS NOT INITIAL.
+    APPEND ls_code TO et_code.
+  ENDIF.
+ENDMETHOD.</source>
+ </method>
+</CLAS>

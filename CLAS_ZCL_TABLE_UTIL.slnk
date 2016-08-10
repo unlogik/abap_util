@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZCL_TABLE_UTIL" VERSION="1" LANGU="6" DESCRIPT="TAbliène operacije" UUID="4B9E395838721224E10000000A64649B" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="DRIGER" CREATEDON="20100315" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="700" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 ">
+ <publicSection>class ZCL_TABLE_UTIL definition
+  public
+  final
+  create public .
+
+*&quot;* public components of class ZCL_TABLE_UTIL
+*&quot;* do not include other source files here!!!
+public section.
+
+  class-methods SPLIT_TABLE
+    importing
+      !IM_FNAMES type ZFNAMES5
+    exporting
+      value(ET_INDEX) type ZINDEX_IT
+    changing
+      !IT_TABLE type STANDARD TABLE
+    exceptions
+      ERROR .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZCL_TABLE_UTIL
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+ <privateSection>*&quot;* private components of class ZCL_TABLE_UTIL
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <method CLSNAME="ZCL_TABLE_UTIL" CMPNAME="SPLIT_TABLE" VERSION="1" LANGU="6" DESCRIPT="Grupira podatke po zadanim poljima" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20100315" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="700" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCL_TABLE_UTIL" CMPNAME="SPLIT_TABLE" SCONAME="IM_FNAMES" VERSION="1" LANGU="6" DESCRIPT="Structure for Variable object field names" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20100315" CHANGEDBY="DRIGER" CHANGEDON="20100315" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZFNAMES5"/>
+  <parameter CLSNAME="ZCL_TABLE_UTIL" CMPNAME="SPLIT_TABLE" SCONAME="ET_INDEX" VERSION="1" LANGU="6" DESCRIPT="Indexi grupiranja po poljima" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20100315" CHANGEDBY="DRIGER" CHANGEDON="20100315" PARDECLTYP="1" PARPASSTYP="0" TYPTYPE="1" TYPE="ZINDEX_IT"/>
+  <parameter CLSNAME="ZCL_TABLE_UTIL" CMPNAME="SPLIT_TABLE" SCONAME="IT_TABLE" VERSION="1" LANGU="6" DESCRIPT="Indexi grupiranja po poljima" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="DRIGER" CREATEDON="20100315" CHANGEDBY="DRIGER" CHANGEDON="20100315" PARDECLTYP="2" PARPASSTYP="1" TYPTYPE="1" TYPE="STANDARD TABLE"/>
+  <exception CLSNAME="ZCL_TABLE_UTIL" CMPNAME="SPLIT_TABLE" SCONAME="ERROR" VERSION="1" LANGU="6" DESCRIPT="Greška pri raspodjeli tablice" MTDTYPE="0" EDITORDER="1 " AUTHOR="DRIGER" CREATEDON="20100315" CHANGEDON="00000000"/>
+  <source>METHOD split_table.
+  DATA: ls_index  LIKE LINE OF et_index,
+        lf_fcount TYPE int2,
+        lf_index  TYPE int4.
+  FIELD-SYMBOLS: &lt;line&gt;  TYPE data,
+                 &lt;ref&gt;   TYPE data,
+                 &lt;fname&gt; TYPE data,
+                 &lt;field&gt; TYPE data,
+                 &lt;ref_field&gt; TYPE data.
+
+  DO 5 TIMES.
+    ASSIGN COMPONENT sy-index OF STRUCTURE im_fnames TO &lt;field&gt;.
+    IF &lt;field&gt; IS INITIAL.
+      EXIT.
+    ELSE.
+      ADD 1 TO lf_fcount.
+    ENDIF.
+  ENDDO.
+
+  SORT it_table BY (im_fnames-fname1) (im_fnames-fname2) (im_fnames-fname3) (im_fnames-fname4) (im_fnames-fname5).
+  LOOP AT it_table ASSIGNING &lt;line&gt;.
+    lf_index = sy-tabix.
+    IF sy-tabix = 1.
+      ls_index-idxfrom = 1.
+      ASSIGN &lt;line&gt; TO &lt;ref&gt;.
+    ENDIF.
+    DO lf_fcount TIMES.
+      &quot;Assign name of field for comparison
+      ASSIGN COMPONENT sy-index OF STRUCTURE im_fnames TO &lt;fname&gt;.
+      IF sy-subrc &lt;&gt; 0.
+        RAISE error.
+      ENDIF.
+      &quot;Assign field for comparison
+      ASSIGN COMPONENT &lt;fname&gt; OF STRUCTURE &lt;line&gt; TO &lt;field&gt;.
+      IF sy-subrc &lt;&gt; 0.
+        RAISE error.
+      ENDIF.
+      &quot;Assign ref field for comparison
+      ASSIGN COMPONENT &lt;fname&gt; OF STRUCTURE &lt;ref&gt; TO &lt;ref_field&gt;.
+      IF sy-subrc &lt;&gt; 0.
+        RAISE error.
+      ENDIF.
+      IF &lt;field&gt; &lt;&gt; &lt;ref_field&gt;.
+        ls_index-idxto   = lf_index - 1.
+        APPEND ls_index TO et_index.
+        ls_index-idxfrom = lf_index.
+        ASSIGN &lt;line&gt; TO &lt;ref&gt;.
+      ENDIF.
+    ENDDO.
+  ENDLOOP.
+  ls_index-idxto = lf_index.
+  APPEND ls_index TO et_index.
+  CLEAR ls_index.
+ENDMETHOD.</source>
+ </method>
+</CLAS>
